@@ -23,7 +23,7 @@ jobs:
           account-type: personal
           keep-at-least: 4
           skip-tags: latest
-          token: ${{ secrets.GHCR_CLEANUP_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print Output
         run: |-
