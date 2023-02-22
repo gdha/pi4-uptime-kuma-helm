@@ -246,4 +246,4 @@ Found. Redirecting to /dashboard
 
 Allright, open a browser with the http://192.168.0.234:80 URL, and we get to see the initial uptime-kuma screen requesting for a admin account name with password of your choice:
 
-<img alt="uptime-kuma intial window" src="pictures/uptime-kuma-admin.png" width="600">
+image:pictures/uptime-kuma-admin.png[uptime-kuma intial window]
