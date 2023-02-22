@@ -1,0 +1,52 @@
+FROM docker.io/louislam/uptime-kuma:1.20.1-debian@sha256:581416348011b2b5d0a8c4950385c6e4191fc5ea3d7eb83da9193827d00456f9 AS app-donor
+
+FROM docker.io/node:16.19.1-bullseye-slim@sha256:97de7e6381540b593c55cd628a44ddffacdbadf9d3ba2f56b56f4913d8f95541
+
+ARG UID=3310
+ARG GID=3310
+
+# renovate: datasource=pypi depName=apprise versioning=pep440
+ARG APPRISE_VERSION=1.2.1
+
+# renovate: datasource=github-releases depName=cloudflare/cloudflared
+ARG CLOUDFLARED_VERSION=2023.2.1
+
+COPY --from=app-donor /app /app
+
+RUN apt-get update -qqy \
+    # Install Uptime-Kuma dependencies
+    && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -qqy \
+        python3 python3-pip python3-cryptography python3-six python3-yaml python3-click python3-markdown python3-requests python3-requests-oauthlib \
+        sqlite3 iputils-ping util-linux dumb-init curl ca-certificates bash \
+    && pip3 --no-cache-dir install apprise==${APPRISE_VERSION} \
+    && rm -rf /var/lib/apt/lists/* \
+    \
+    # Download and install cloudflared
+    && ARCH= && dpkgArch="$(dpkg --print-architecture)" \
+    && case "${dpkgArch##*-}" in \
+      amd64) ARCH='amd64';; \
+      arm64) ARCH='arm64';; \
+      armhf) ARCH='arm';; \
+      *) echo "unsupported architecture"; exit 1 ;; \
+    esac \
+    && curl -fsSLo /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/download/${CLOUDFLARED_VERSION}/cloudflared-linux-${ARCH} \
+    && chmod +x /usr/local/bin/cloudflared \
+    \
+    # Setup non-root system account + group
+    && addgroup --system --gid ${GID} uptime-kuma || true \
+    && adduser --system --disabled-login --ingroup uptime-kuma --no-create-home --home /nonexistent --gecos "uptime-kuma" --shell /bin/false --uid ${UID} uptime-kuma || true \
+    && mkdir -p /app/data \
+    && chown -R uptime-kuma:0 /app \
+    && chmod -R g=u /app \
+    \
+    # Smoke Tests
+    && set -ex || exit $?; \
+      cloudflared version; \
+      apprise --version;
+
+ENV HOME=/app
+WORKDIR /app
+USER uptime-kuma
+EXPOSE 3001
+VOLUME ["/app/data"]
+CMD ["/usr/bin/dumb-init", "--", "node", "server/server.js"]
