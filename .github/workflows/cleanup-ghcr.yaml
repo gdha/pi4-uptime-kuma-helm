@@ -1,4 +1,5 @@
 name: "♻️ Cleanup GHCR"
+# see also https://github.com/marketplace/actions/container-retention-policy
 
 on:
   schedule:
@@ -13,7 +14,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Delete old unused container images
-        uses: snok/container-retention-policy@482ce28159f65a8bfad986da1fedcef40169aa75 # v2.0.0
+        uses: snok/container-retention-policy@v2
         id: retention
         with:
           image-names: uptime-kuma
