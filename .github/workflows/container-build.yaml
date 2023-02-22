@@ -1,0 +1,79 @@
+name: "🏗️ Container Image Build"
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - container/**
+  push:
+    branches:
+      - main
+    paths:
+      - container/**
+  workflow_dispatch:
+    inputs:
+      publish:
+        type: boolean
+        default: false
+        required: true
+        description: "Push the image after the build?"
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Install qemu dependency
+        run: |-
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static
+
+      - name: Get Uptime-Kuma Version
+        run: |-
+          VERSION=`sed -nr "s;.*docker.io/louislam/uptime-kuma:(.*)-debian.*;\1;p" container/Containerfile`
+          echo "APP_VERSION=${VERSION}"
+          echo "APP_VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - id: container
+        name: Build Container Image
+        uses: redhat-actions/buildah-build@b4dc19b4ba891854660ab1f88a097d45aa158f76 # v2.12
+        with:
+          image: uptime-kuma
+          tags: >-
+            latest
+            ${{ env.APP_VERSION }}
+          oci: true
+          platforms: linux/amd64, linux/arm64, linux/arm/v7
+          containerfiles: |-
+            container/Containerfile
+
+      - name: Push container image to quay.io
+        if: ${{ (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish)) && github.ref == 'refs/heads/main' }}
+        uses: redhat-actions/push-to-registry@9e8327fcde18a44143eda2e7dfe68eca01aeeeea # v2.7
+        with:
+          image: ${{ steps.container.outputs.image }}
+          tags: ${{ steps.container.outputs.tags }}
+          registry: quay.io/k3rnel-pan1c
+          username: ${{ secrets.QUAY_USR }}
+          password: ${{ secrets.QUAY_PWD }}
+
+      - name: Push container image to ghcr.io
+        if: ${{ (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.publish)) && github.ref == 'refs/heads/main' }}
+        uses: redhat-actions/push-to-registry@9e8327fcde18a44143eda2e7dfe68eca01aeeeea # v2.7
+        with:
+          image: ${{ steps.container.outputs.image }}
+          tags: ${{ steps.container.outputs.tags }}
+          registry: ghcr.io/${{ github.repository_owner }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
