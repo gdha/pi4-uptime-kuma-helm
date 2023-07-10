@@ -1,4 +1,6 @@
 # Build the pi4-uptime-kuma container image
+### Be aware that GitHub build via Action the container automatically and push it to ghcr.io
+
 # To build with a new version: ./build.sh v1.1
 REL=${1:-v1.0}
 cat ~/.ghcr-token | docker login ghcr.io -u gdha --password-stdin
