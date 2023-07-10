@@ -1,15 +1,15 @@
-FROM docker.io/louislam/uptime-kuma:1.20.1-debian@sha256:581416348011b2b5d0a8c4950385c6e4191fc5ea3d7eb83da9193827d00456f9 AS app-donor
+FROM docker.io/louislam/uptime-kuma:1.22.1-debian@sha256:0b55bcb83a1c46c6f08bcc0329fc6c1d86039581102ec8db896976a9d46de01d AS app-donor
 
-FROM docker.io/node:16.19.1-bullseye-slim@sha256:97de7e6381540b593c55cd628a44ddffacdbadf9d3ba2f56b56f4913d8f95541
+FROM docker.io/node:16.20.1-bullseye-slim@sha256:e8b9a589fbeb75b8a2c8e15ef664fbd75b146e3fc6bc7151f235113a8c07bdf4
 
 ARG UID=3310
 ARG GID=3310
 
 # renovate: datasource=pypi depName=apprise versioning=pep440
-ARG APPRISE_VERSION=1.2.1
+ARG APPRISE_VERSION=1.4.0
 
 # renovate: datasource=github-releases depName=cloudflare/cloudflared
-ARG CLOUDFLARED_VERSION=2023.2.1
+ARG CLOUDFLARED_VERSION=2023.6.1
 
 COPY --from=app-donor /app /app
 
