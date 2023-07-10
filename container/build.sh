@@ -1,7 +1,10 @@
 # Build the pi4-uptime-kuma container image
 ### Be aware that GitHub build via Action the container automatically and push it to ghcr.io
+### => that is uptime-kuma for x86 platform.
 
-# To build with a new version: ./build.sh v1.1
+### As we want it for arm64 we need to build it ourselves with the following command:
+### To build with a new version: ./build.sh v1.0.5
+### 10/Jul/2023 - last one build was v1.0.5 (always increment nr)
 REL=${1:-v1.0}
 cat ~/.ghcr-token | docker login ghcr.io -u gdha --password-stdin
 echo "Building pi4-uptime-kuma:$REL"
