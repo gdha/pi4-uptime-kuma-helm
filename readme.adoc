@@ -85,7 +85,7 @@ metadata:
 # Edit ghcr-secret.yaml and add namespace: celsius in the metadata section.
 apiVersion: v1
 data:
-  .dockerconfigjson: eyJhdXRocyI6eyJnaGNyLmlvIjp7InVzZXJuYW1lIjoiZ2RoYSIsInBhc3N3b3JkIjoiZ2hwX3V5TzRJcFJyek5qRXNuSU5zdzRENXVWUVVnZGFaUjQ0djRjNiIsImF1dGgiOiJaMlJvWVRwbmFIQmZkWGxQTkVsd1VuSjZUbXBGYzI1SlRuTjNORVExZFZaUlZXZGtZVnBTTkRSMk5HTTIifX19
+  .dockerconfigjson: blabla
 kind: Secret
 metadata:
   creationTimestamp: null
