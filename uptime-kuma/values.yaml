@@ -8,7 +8,7 @@ namespaceOverride: "uptime-kuma"
 
 image:
   registry: "ghcr.io"
-  repository: "gdha/pi4-uptime-kuma"
+  repository: "gdha/uptime-kuma"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the Chart's appVersion.
   tag: ""
