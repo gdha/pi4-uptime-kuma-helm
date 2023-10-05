@@ -248,7 +248,7 @@ Allright, open a browser with the http://192.168.0.234:80 URL, and we get to see
 
 image:pictures/uptime-kuma-admin.png[uptime-kuma intial window]
 
-== Remving via helm
+== Removing via helm
 
 ----
 $ helm delete  --namespace uptime-kuma  uptime-kuma

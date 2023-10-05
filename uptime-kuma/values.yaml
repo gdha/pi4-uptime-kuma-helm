@@ -93,10 +93,10 @@ resources: {}
   #   memory: 128Mi
 
 persistence:
-  enabled: false
+  enabled: true
   claimNameOverwrite: ""
   sizeLimit: 4Gi
-  storageClass: ""
+  storageClass: "longhorn"
   annotations: {}
   labels: {}
 
