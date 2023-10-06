@@ -58,6 +58,22 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.persistence.enabled }}
+      initContainers:
+        - name: fix-volume-rights
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          command:
+          - /bin/sh
+          - -c
+          - "chown 3310:3310 /home ; ls -ld /home"
+          volumeMounts:
+          - name: uptime-storage
+            mountPath: "/home"
+      {{- end }}
       volumes:
         - name: uptime-storage
           {{- if .Values.persistence.enabled }}
