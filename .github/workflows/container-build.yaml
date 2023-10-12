@@ -51,7 +51,6 @@ jobs:
         with:
           image: uptime-kuma
           tags: >-
-            latest
             ${{ env.APP_VERSION }}
           oci: true
           platforms: linux/amd64, linux/arm64
