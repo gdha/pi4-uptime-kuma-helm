@@ -22,7 +22,7 @@ version: 1.0.6
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 # Use: docker image ls  (to find the latest one)
-appVersion: "1.23.2"
+appVersion: "1.23.3"
 
 icon: https://github.com/louislam/uptime-kuma/blob/master/public/apple-touch-icon-precomposed.png
 
