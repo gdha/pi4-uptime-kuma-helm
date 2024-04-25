@@ -1,6 +1,6 @@
-FROM docker.io/louislam/uptime-kuma:1.23.12-debian@sha256:bc6f244ecf277eeff6cc54262b724b693b386766c28fe78d7d5b9247d37907fd AS app-donor
+FROM docker.io/louislam/uptime-kuma:1.23.13-debian@sha256:96510915e6be539b76bcba2e6873591c67aca8a6075ff09f5b4723ae47f333fc AS app-donor
 
-FROM docker.io/node:21.7.3-bullseye-slim@sha256:65881997e49f9118732af6e10e88cd6b632df8c8f1b0d47009c604103a46d955
+FROM docker.io/node:21.7.3-bullseye-slim@sha256:788417c15fd7e0fde36a592e70c06fdb9b0a553733ad036e118ece9950d0d35e
 
 ARG UID=3310
 ARG GID=3310
