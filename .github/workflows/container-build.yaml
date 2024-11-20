@@ -38,6 +38,7 @@ jobs:
         run: |-
           sudo apt-get update
           sudo apt-get install -y qemu-user-static
+          sudo apt install libc-bin
 
       - name: Get Uptime-Kuma Version
         run: |-
