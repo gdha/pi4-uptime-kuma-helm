@@ -20,8 +20,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && mv /var/lib/dpkg/info/libc-bin.* /tmp/ \
     && apt-get install --yes --reinstall libc-bin \
     && mv /tmp/libc-bin.* /var/lib/dpkg/info/ \
-    && apt-get update -qqy \
     && dpkg --configure -a \
+    && apt-get update -qqy \
     # Install Uptime-Kuma dependencies \
     && apt-get install --no-install-recommends -qqy \
         python3 python3-pip python3-cryptography python3-six python3-yaml python3-click python3-markdown python3-requests python3-requests-oauthlib \
