@@ -16,12 +16,10 @@ COPY --from=app-donor /app /app
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
-    && rm /var/lib/dpkg/info/libc-bin.* \
     && apt-get clean \
-    && apt-get download libc-bin \
-    && dpkg -x libc-bin*.deb unpackdir/ \
-    && cp unpackdir/sbin/ldconfig /sbin/ \
-    && apt-get install --reinstall libc-bin \
+    && mv /var/lib/dpkg/info/libc-bin.* /tmp/ \
+    && apt-get install --yes --reinstall libc-bin \
+    && mv /tmp/libc-bin.* /var/lib/dpkg/info/ \
     && apt-get update -qqy \
     && dpkg --configure -a \
     # Install Uptime-Kuma dependencies \
