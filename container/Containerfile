@@ -14,19 +14,18 @@ ARG CLOUDFLARED_VERSION=2025.1.0
 
 COPY --from=app-donor /app /app
 
-RUN export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
     && rm /var/lib/dpkg/info/libc-bin.* \
     && apt-get clean \
-    && apt-get install --yes apt \ 
+    && apt-get download libc-bin \
+    && dpkg -x libc-bin*.deb unpackdir/ \
+    && cp unpackdir/sbin/ldconfig /sbin/ \
+    && apt-get install --reinstall libc-bin \
     && apt-get update -qqy \
-    #&& dpkg --purge --force-all libc-bin \
-    #&& echo 'exec /sbin/ldconfig.real "$@"' > /sbin/ldconfig \
-    #&& chmod 755 /sbin/ldconfig \
-    && apt-get install --yes libc-bin \
-    #&& /sbin/ldconfig.real \
-    && apt-get --fix-broken install \
+    && dpkg --configure -a \
     # Install Uptime-Kuma dependencies \
-    && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -qqy \
+    && apt-get install --no-install-recommends -qqy \
         python3 python3-pip python3-cryptography python3-six python3-yaml python3-click python3-markdown python3-requests python3-requests-oauthlib \
         sqlite3 iputils-ping util-linux dumb-init curl ca-certificates bash \
     && pip3 --no-cache-dir install apprise==${APPRISE_VERSION} \
