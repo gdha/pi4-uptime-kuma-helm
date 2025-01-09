@@ -18,7 +18,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
     && apt-get clean \
     && mv /var/lib/dpkg/info/libc-bin.* /tmp/ \
-    && apt-get install --yes --reinstall libc-bin \
+    && apt-get install --yes libc-bin \
     && mv /tmp/libc-bin.* /var/lib/dpkg/info/ \
     && dpkg --configure -a \
     && apt-get update -qqy \
