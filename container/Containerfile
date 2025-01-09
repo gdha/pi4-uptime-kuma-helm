@@ -34,8 +34,8 @@ RUN apt-get update -qqy \
     && chmod +x /usr/local/bin/cloudflared \
     \
     # Setup non-root system account + group
-    && addgroup --system --gid ${GID} uptime-kuma || true \
-    && adduser --system --disabled-login --ingroup uptime-kuma --no-create-home --home /nonexistent --gecos "uptime-kuma" --shell /bin/false --uid ${UID} uptime-kuma || true \
+    && adduser --system --disabled-login --no-create-home --home /nonexistent --gecos "uptime-kuma" --shell /bin/false --uid ${UID} --group uptime-kuma || true \
+    && grep uptime-kuma /etc/passwd \
     && mkdir -p /app/data \
     && chown -R uptime-kuma:0 /app \
     && chmod -R g=u /app \
