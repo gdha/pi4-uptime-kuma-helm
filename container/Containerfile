@@ -17,7 +17,7 @@ COPY --from=app-donor /app /app
 RUN export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
     && rm /var/lib/dpkg/info/libc-bin.* \
     && apt-get clean \
-    && apt-get install --yes apt-utils \ 
+    && apt-get install --yes apt \ 
     && apt-get update -qqy \
     #&& dpkg --purge --force-all libc-bin \
     #&& echo 'exec /sbin/ldconfig.real "$@"' > /sbin/ldconfig \
