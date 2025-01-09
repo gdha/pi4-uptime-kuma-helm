@@ -17,21 +17,22 @@ COPY --from=app-donor /app /app
 RUN export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
     && rm /var/lib/dpkg/info/libc-bin.* \
     && apt-get clean \
+    && apt-get install --yes apt-utils \ 
     && apt-get update -qqy \
     #&& dpkg --purge --force-all libc-bin \
     #&& echo 'exec /sbin/ldconfig.real "$@"' > /sbin/ldconfig \
     #&& chmod 755 /sbin/ldconfig \
     && apt-get install --yes libc-bin \
-    && /sbin/ldconfig.real \
+    #&& /sbin/ldconfig.real \
     && apt-get --fix-broken install \
-    # Install Uptime-Kuma dependencies
+    # Install Uptime-Kuma dependencies \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -qqy \
         python3 python3-pip python3-cryptography python3-six python3-yaml python3-click python3-markdown python3-requests python3-requests-oauthlib \
         sqlite3 iputils-ping util-linux dumb-init curl ca-certificates bash \
     && pip3 --no-cache-dir install apprise==${APPRISE_VERSION} \
     && rm -rf /var/lib/apt/lists/* \
     \
-    # Download and install cloudflared
+    # Download and install cloudflared \
     && ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && case "${dpkgArch##*-}" in \
       amd64) ARCH='amd64';; \
@@ -42,14 +43,14 @@ RUN export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
     && curl -fsSLo /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/download/${CLOUDFLARED_VERSION}/cloudflared-linux-${ARCH} \
     && chmod +x /usr/local/bin/cloudflared \
     \
-    # Setup non-root system account + group
+    # Setup non-root system account + group \
     && adduser --system --disabled-login --no-create-home --home /nonexistent --gecos "uptime-kuma" --shell /bin/false --uid ${UID} --group uptime-kuma || true \
     && grep uptime-kuma /etc/passwd \
     && mkdir -p /app/data \
     && chown -R uptime-kuma:0 /app \
     && chmod -R g=u /app \
     \
-    # Smoke Tests
+    # Smoke Tests \
     && set -ex || exit $?; \
       cloudflared version; \
       apprise --version;
