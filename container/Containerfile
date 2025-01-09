@@ -1,3 +1,4 @@
+# Containerfile for building our own version of uptime-kuma
 FROM docker.io/louislam/uptime-kuma:1.23.16-debian@sha256:431fee3be822b04861cf0e35daf4beef6b7cb37391c5f26c3ad6e12ce280fe18 AS app-donor
 
 FROM docker.io/node:21.7.3-bullseye-slim@sha256:50adaf5a166e4e3dc01e77e9bdb4c35e34ef32a1e9e26200019cddb2b154fb34
@@ -14,6 +15,7 @@ ARG CLOUDFLARED_VERSION=2025.1.0
 COPY --from=app-donor /app /app
 
 RUN apt-get update -qqy \
+    && apt-get reinstall --yes libc \
     && apt-get --fix-broken install \
     # Install Uptime-Kuma dependencies
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -qqy \
