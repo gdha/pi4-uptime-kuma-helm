@@ -17,10 +17,10 @@ COPY --from=app-donor /app /app
 RUN export DEBIAN_FRONTEND=noninteractive \
     && export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
     && apt-get clean \
-    && mv /var/lib/dpkg/info/libc-bin.* /tmp/ \
-    && apt-get install --yes libc-bin \
-    && mv /tmp/libc-bin.* /var/lib/dpkg/info/ \
-    && dpkg --configure -a \
+    #&& mv /var/lib/dpkg/info/libc-bin.* /tmp/ \
+    #&& apt-get install --yes libc-bin \
+    #&& mv /tmp/libc-bin.* /var/lib/dpkg/info/ \
+    && dpkg --configure --no-triggers libc-bin \
     && apt-get update -qqy \
     # Install Uptime-Kuma dependencies \
     && apt-get install --no-install-recommends -qqy \
