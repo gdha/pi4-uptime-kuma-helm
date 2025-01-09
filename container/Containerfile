@@ -18,6 +18,7 @@ RUN export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
     && apt-get update -qqy \
     && dpkg --purge --force-all libc-bin \
     && apt-get install --yes libc-bin \
+    && /sbin/ldconfig.real \
     && apt-get --fix-broken install \
     # Install Uptime-Kuma dependencies
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -qqy \
