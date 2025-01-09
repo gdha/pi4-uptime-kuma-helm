@@ -15,10 +15,12 @@ ARG CLOUDFLARED_VERSION=2025.1.0
 COPY --from=app-donor /app /app
 
 RUN export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
+    && rm /var/lib/dpkg/info/libc-bin.* \
+    && apt-get clean \
     && apt-get update -qqy \
-    && dpkg --purge --force-all libc-bin \
-    && echo 'exec /sbin/ldconfig.real "$@"' > /sbin/ldconfig \
-    && chmod 755 /sbin/ldconfig \
+    #&& dpkg --purge --force-all libc-bin \
+    #&& echo 'exec /sbin/ldconfig.real "$@"' > /sbin/ldconfig \
+    #&& chmod 755 /sbin/ldconfig \
     && apt-get install --yes libc-bin \
     && /sbin/ldconfig.real \
     && apt-get --fix-broken install \
