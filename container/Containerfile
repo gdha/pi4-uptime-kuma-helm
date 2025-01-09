@@ -14,7 +14,8 @@ ARG CLOUDFLARED_VERSION=2025.1.0
 
 COPY --from=app-donor /app /app
 
-RUN apt-get update -qqy \
+RUN export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin \
+    && apt-get update -qqy \
     && dpkg --purge --force-all libc-bin \
     && apt-get install --yes libc-bin \
     && apt-get --fix-broken install \
