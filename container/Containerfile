@@ -15,7 +15,6 @@ ARG CLOUDFLARED_VERSION=2025.1.0
 COPY --from=app-donor /app /app
 
 RUN apt-get update -qqy \
-    && apt-get reinstall --yes libc \
     && apt-get --fix-broken install \
     # Install Uptime-Kuma dependencies
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -qqy \
