@@ -11,7 +11,7 @@ image:
   repository: "gdha/uptime-kuma"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the Chart's appVersion.
-  tag: ""
+  tag: "@sha256:6f1eaeadc7f25cd16054b6b1d871990b5badf6d8ea0fb670d56b20dd8d473b79"
 
 imagePullSecrets: [{name: dockerconfigjson-github-com}]
 nameOverride: ""
@@ -107,5 +107,5 @@ tolerations: []
 affinity: {}
 
 testPod:
-  image: docker.io/busybox@sha256:2919d0172f7524b2d8df9e50066a682669e6d170ac0f6a49676d54358fe970b5
+  image: docker.io/busybox@sha256:e3652a00a2fabd16ce889f0aa32c38eec347b997e73bd09e69c962ec7f8732ee
   annotations: {}
