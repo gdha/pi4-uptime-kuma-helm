@@ -1,7 +1,7 @@
 # Containerfile for building our own version of uptime-kuma
 FROM docker.io/louislam/uptime-kuma:1.23.17-debian@sha256:3d632903e6af34139a37f18055c4f1bfd9b7205ae1138f1e5e8940ddc1d176f9 AS app-donor
 
-FROM docker.io/node:21.7.3-bullseye-slim@sha256:50adaf5a166e4e3dc01e77e9bdb4c35e34ef32a1e9e26200019cddb2b154fb34
+FROM docker.io/node:21.7.3-bookworm-slim@sha256:dfc05dee209a1d7adf2ef189bd97396daad4e97c6eaa85778d6f75205ba1b0fb
 
 ARG UID=3310
 ARG GID=3310
@@ -22,12 +22,12 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     #&& apt-get install --yes libc-bin \
     #&& mv /tmp/libc-bin.* /var/lib/dpkg/info/ \
     #&& dpkg --configure --no-triggers libc-bin \
-    && apt-get update -qqy  || true \
+    && apt-get update -qqy \
     # Install Uptime-Kuma dependencies \
     && apt-get install --no-install-recommends -qqy  \
         python3 python3-pip python3-cryptography python3-six python3-yaml python3-click python3-markdown python3-requests python3-requests-oauthlib \
-        sqlite3 iputils-ping util-linux dumb-init curl ca-certificates bash || true \
-    && pip3 --no-cache-dir install apprise==${APPRISE_VERSION} \
+        sqlite3 iputils-ping util-linux dumb-init curl ca-certificates bash \
+    && PIP_BREAK_SYSTEM_PACKAGES=1 pip3 --no-cache-dir install apprise==${APPRISE_VERSION} \
     && rm -rf /var/lib/apt/lists/* \
     \
     # Download and install cloudflared \
