@@ -38,7 +38,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       armhf) ARCH='arm';; \
       *) echo "unsupported architecture"; exit 1 ;; \
     esac \
-    && curl -fsSLo /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/download/${CLOUDFLARED_VERSION}/cloudflared-linux-${ARCH} \
+    && curl --retry 5 --retry-delay 2 --retry-max-time 60 -fsSLo /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/download/${CLOUDFLARED_VERSION}/cloudflared-linux-${ARCH} \
     && chmod +x /usr/local/bin/cloudflared \
     \
     # Setup non-root system account + group \
